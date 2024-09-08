@@ -1,7 +1,8 @@
 const express = require('express')
 const config = require('config')
 
-const routes = require('./startup/routes')
+// test
+const { getObjectUrl } = require('./services/apiAwsS3')
 
 const app = express()
 
