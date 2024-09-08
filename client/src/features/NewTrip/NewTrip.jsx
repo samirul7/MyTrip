@@ -1,0 +1,101 @@
+import { useState } from 'react'
+import { Button, ButtonToolbar, Form, Modal, Text } from 'rsuite'
+import axios from 'axios'
+import { SERVER_URL } from '../../config'
+import { useNavigate } from 'react-router-dom'
+
+const NewTrip = () => {
+  const [name, setName] = useState('')
+  const [location, setLocation] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isModalOpen, setIsModelOpen] = useState(false)
+  const [modalText, setModalText] = useState('')
+  const [modalTitle, setModalTitle] = useState('')
+  const [tripId, setTripId] = useState('')
+
+  const navigate = useNavigate()
+
+  const handleSubmit = async () => {
+    setIsLoading(true)
+
+    try {
+      const res = await axios({
+        method: 'post',
+        url: `${SERVER_URL}/trip`,
+        data: {
+          name,
+          location,
+        },
+      })
+      if (res.status === 200) {
+        setIsModelOpen(true)
+        setModalText(
+          `New Trip created with name '${name}' and location '${location}'. Do you want to add photos and videos to this trip?`
+        )
+        setModalTitle('Trip Created')
+        setTripId(res.data._id)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setIsModelOpen(false)
+  }
+
+  const navigateNewTripPage = () => {
+    navigate(`/trip/${tripId}`)
+    handleCloseModal()
+  }
+
+  return (
+    <>
+      <Modal open={isModalOpen} onClose={handleCloseModal}>
+        <Modal.Header>
+          <Modal.Title>{modalTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Text>{modalText}</Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={navigateNewTripPage} appearance='primary'>
+            Ok
+          </Button>
+          <Button onClick={handleCloseModal} appearance='subtle'>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Form layout='horizontal' style={{ margin: '20px' }}>
+        <Form.Group controlId='name-6'>
+          <Form.ControlLabel>Name</Form.ControlLabel>
+          <Form.Control name='name' value={name} onChange={setName} />
+        </Form.Group>
+        <Form.Group controlId='location-6'>
+          <Form.ControlLabel>Location</Form.ControlLabel>
+          <Form.Control
+            name='location'
+            value={location}
+            onChange={setLocation}
+          />
+        </Form.Group>
+        <Form.Group>
+          <ButtonToolbar>
+            <Button
+              appearance='primary'
+              onClick={handleSubmit}
+              loading={isLoading}
+            >
+              Create Trip
+            </Button>
+          </ButtonToolbar>
+        </Form.Group>
+      </Form>
+    </>
+  )
+}
+export default NewTrip

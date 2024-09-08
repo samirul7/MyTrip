@@ -15,7 +15,7 @@ const Navigation = () => {
     <Navbar appearance='inverse'>
       <Navbar.Brand>MyTrip</Navbar.Brand>
       <Nav activeKey={active} onSelect={setNavigate}>
-        <Nav.Item eventKey='trip'>TripInfo</Nav.Item>
+        <Nav.Item eventKey='trip/66dc6263081968cec1891bad'>TripInfo</Nav.Item>
         <Nav.Item eventKey='newTrip'>New Trip</Nav.Item>
       </Nav>
     </Navbar>
