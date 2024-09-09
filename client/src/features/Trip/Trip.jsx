@@ -1,22 +1,20 @@
-import { useLoaderData } from 'react-router-dom'
 import styles from './Trip.module.css'
+
+import { useLoaderData } from 'react-router-dom'
 import { Accordion, Heading, HStack, Text } from 'rsuite'
+import PhotoList from '../Photo/PhotoList/PhotoList'
+import { useState } from 'react'
 
 const Trip = () => {
   const tripInfo = useLoaderData()
+  const [showVideos, setShowVideos] = useState(true)
   return (
     <>
       <HStack justifyContent='space-between' style={{ padding: '0 20px' }}>
         <Heading>{tripInfo.name}</Heading>
         <Text>Location: {tripInfo.location}</Text>
       </HStack>
-      <Accordion>
-        <Accordion.Panel header='Photos' defaultExpanded>
-          {tripInfo.media?.photos.map((photo) => (
-            <img className={styles.img} key={photo._id} src={photo.url} />
-          ))}
-        </Accordion.Panel>
-      </Accordion>
+      <PhotoList photos={tripInfo.media?.photos} />
       <Accordion>
         <Accordion.Panel header='Videos' defaultExpanded>
           {tripInfo.media?.videos.map((video) => (
