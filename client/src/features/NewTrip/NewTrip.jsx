@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Button, ButtonToolbar, Form, Modal, Text } from 'rsuite'
 import axios from 'axios'
-import { SERVER_URL } from '../../config'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../../services/apiTrip'
 
 const NewTrip = () => {
   const [name, setName] = useState('')
@@ -21,7 +21,7 @@ const NewTrip = () => {
     try {
       const res = await axios({
         method: 'post',
-        url: `${SERVER_URL}/trip`,
+        url: `${API_URL}/trip`,
         data: {
           name,
           location,

@@ -4,6 +4,7 @@ import { useLoaderData } from 'react-router-dom'
 import { Accordion, Heading, HStack, Text } from 'rsuite'
 import PhotoList from '../Photo/PhotoList/PhotoList'
 import { useState } from 'react'
+import Photo from '../Photo/Photo'
 
 const Trip = () => {
   const tripInfo = useLoaderData()
@@ -14,7 +15,7 @@ const Trip = () => {
         <Heading>{tripInfo.name}</Heading>
         <Text>Location: {tripInfo.location}</Text>
       </HStack>
-      <PhotoList photos={tripInfo.media?.photos} />
+      <Photo />
       <Accordion>
         <Accordion.Panel header='Videos' defaultExpanded>
           {tripInfo.media?.videos.map((video) => (

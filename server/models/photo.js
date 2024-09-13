@@ -9,6 +9,15 @@ const Photo = mongoose.model(
       minlength: 3,
       maxlength: 30,
     },
+    fileType: {
+      type: String,
+      required: true,
+    },
+    tripId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Trip',
+    },
   })
 )
 
