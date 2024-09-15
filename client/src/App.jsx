@@ -6,6 +6,8 @@ import { getTripInfo } from './services/apiTrip'
 import PhotoList, {
   loader as photoLoader,
 } from './features/Photo/PhotoList/PhotoList'
+import Login from './features/User/Login/Login'
+import SignUp from './features/User/SignUp/SignUp'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
       {
         path: 'newTrip',
         element: <NewTrip />,
+      },
+      {
+        path: 'login',
+        element: <Login />,
+      },
+      {
+        path: 'signup',
+        element: <SignUp />,
       },
     ],
   },

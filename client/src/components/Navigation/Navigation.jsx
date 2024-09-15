@@ -18,6 +18,9 @@ const Navigation = () => {
         <Nav.Item eventKey='trip/66dc6263081968cec1891bad'>TripInfo</Nav.Item>
         <Nav.Item eventKey='newTrip'>New Trip</Nav.Item>
       </Nav>
+      <Nav pullRight onSelect={setNavigate} activeKey={active}>
+        <Nav.Item eventKey='login'>Login/Sign Up</Nav.Item>
+      </Nav>
     </Navbar>
   )
 }

@@ -1,4 +1,4 @@
-import { useLoaderData, useParams } from 'react-router-dom'
+import { useLoaderData } from 'react-router-dom'
 import { API_URL } from '../../../services/apiTrip'
 
 import styles from './PhotoList.module.css'
