@@ -5,7 +5,9 @@ const { getObjectUrl, putObjectUrl } = require('../services/apiAwsS3')
 const router = express.Router()
 
 router.get('/', async (req, res) => {
+  console.log('I am being called')
   const { tripId } = req.query
+  console.log(tripId)
   try {
     const photos = await Photo.find({ tripId })
     const promises = photos.map(async ({ fileName, _id }) => {

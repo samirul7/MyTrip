@@ -18,6 +18,8 @@ import { Unvisible, Visible } from '@rsuite/icons'
 import { forwardRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { validateEmail, validatePassword } from '../../../utils/helper'
+import axios from 'axios'
+import { API_URL } from '../../../services/apiTrip'
 
 const Password = forwardRef(function Password(props, ref) {
   const [visible, setVisible] = useState(false)
@@ -42,16 +44,16 @@ const Password = forwardRef(function Password(props, ref) {
 const SignUp = () => {
   const navigate = useNavigate()
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState('Samirul')
   const [nameErrorMessage, setNameErrorMessage] = useState('')
 
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('test@test.com')
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
 
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('Test@1234')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
 
-  const [rePassword, setRePassword] = useState('')
+  const [rePassword, setRePassword] = useState('Test@1234')
   const [rePasswordErrorMessage, setRePasswordErrorMessage] = useState('')
   const [isRePasswordEnabled, setIsRePasswordEnabled] = useState(false)
 
@@ -100,41 +102,58 @@ const SignUp = () => {
   }
 
   const handleModalClose = () => {
-    setModal('')
+    setModal({ isOpen: false })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (name === '') return setModal("Full Name can't be empty.")
-    if (validateEmail(email) === false)
-      return setModal((modal) => ({
-        ...modal,
-        isOpen: true,
-        message: 'Invalid Email.',
-        type: 'error',
-      }))
+    // if (validateEmail(email) === false)
+    //   return setModal((modal) => ({
+    //     ...modal,
+    //     isOpen: true,
+    //     message: 'Invalid Email.',
+    //     type: 'error',
+    //   }))
 
-    if (validatePassword(password) === false)
-      return setModal((modal) => ({
-        ...modal,
-        isOpen: true,
-        message: 'Invalid Password.',
-        type: 'error',
-      }))
+    // if (validatePassword(password) === false)
+    //   return setModal((modal) => ({
+    //     ...modal,
+    //     isOpen: true,
+    //     message: 'Invalid Password.',
+    //     type: 'error',
+    //   }))
 
-    if (password !== rePassword)
-      return setModal((modal) => ({
-        ...modal,
+    // if (password !== rePassword)
+    //   return setModal((modal) => ({
+    //     ...modal,
+    //     isOpen: true,
+    //     message: 'Password does not match.',
+    //     type: 'error',
+    //   }))
+    //   all good, send request to create user
+    try {
+      const res = await axios.post(
+        `${API_URL}/user`,
+        {
+          name,
+          email,
+          password,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        }
+      )
+      console.log(res)
+    } catch (error) {
+      setModal({
         isOpen: true,
-        message: 'Password does not match.',
+        message: error.response?.data || error.message,
+        title: 'Error!',
         type: 'error',
-      }))
-    //   all good
-    setModal((modal) => ({
-      ...modal,
-      isOpen: true,
-      message: 'All good',
-      type: 'info',
-    }))
+      })
+      console.error(error)
+    }
   }
 
   const handleClosePasswordPolicyModal = () =>
@@ -175,14 +194,6 @@ const SignUp = () => {
             <List.Item>At least one special character</List.Item>
           </List>
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleClosePasswordPolicyModal} appearance='primary'>
-            Ok
-          </Button>
-          <Button onClick={handleClosePasswordPolicyModal} appearance='subtle'>
-            Cancel
-          </Button>
-        </Modal.Footer>
       </Modal>
 
       <Container>

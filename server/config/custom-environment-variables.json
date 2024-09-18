@@ -1,4 +1,5 @@
 {
   "accessKey": "myTrip_accessKey",
-  "secretAccessKey": "myTrip_secretAccessKey"
+  "secretAccessKey": "myTrip_secretAccessKey",
+  "jwtPrivateKey": "myTrip_jwtPrivateKey"
 }
