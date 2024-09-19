@@ -8,6 +8,7 @@ import PhotoList, {
 } from './features/Photo/PhotoList/PhotoList'
 import Login from './features/User/Login/Login'
 import SignUp from './features/User/SignUp/SignUp'
+import AuthRequired from './features/User/AuthRequired'
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'trip/:id',
-        element: <Trip />,
+        element: (
+          <AuthRequired>
+            <Trip />
+          </AuthRequired>
+        ),
         loader: async ({ params }) => {
           const data = await getTripInfo(params.id)
           return data
@@ -31,7 +36,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'newTrip',
-        element: <NewTrip />,
+        element: (
+          <AuthRequired>
+            <NewTrip />
+          </AuthRequired>
+        ),
       },
       {
         path: 'login',

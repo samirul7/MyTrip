@@ -30,6 +30,7 @@ router.post('/', async (req, res) => {
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
+      // secure: true,
     })
     res.json({ accessToken })
   } catch (error) {
