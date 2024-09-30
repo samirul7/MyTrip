@@ -16,6 +16,7 @@
   gap: 10px;
   box-shadow: 5px 10px 20px rgb(181, 101, 101);
   border: 1px solid black;
+  z-index: 1;
 
   position: absolute;
   top: 60px;

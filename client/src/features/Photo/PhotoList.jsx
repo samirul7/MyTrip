@@ -3,8 +3,8 @@ import styles from './PhotoList.module.css'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
-import PhotoItem from '../PhotoItem'
-import privateAxios from '../../../app/api/privateAxios'
+import PhotoItem from './PhotoItem'
+import privateAxios from '../../app/api/privateAxios'
 
 const PhotoList = () => {
   const params = useParams()
@@ -24,7 +24,7 @@ const PhotoList = () => {
   })
 
   if (isError) return <p>Error</p>
-  if (isLoading) return <p>Loading</p>
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <div className={styles.photoList}>

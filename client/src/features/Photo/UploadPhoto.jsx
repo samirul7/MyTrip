@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Accordion, Button, Uploader } from 'rsuite'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import privateAxios from '../../../app/api/privateAxios'
+import privateAxios from '../../app/api/privateAxios'
 
 const UploadPhoto = () => {
   const [fileList, setFileList] = useState([])

@@ -1,5 +1,6 @@
-import { Button, Modal } from 'rsuite'
 import styles from './PhotoUpload.module.css'
+
+import { Button, Modal } from 'rsuite'
 import { useState } from 'react'
 import { TiDeleteOutline } from 'react-icons/ti'
 import { MdOutlineErrorOutline } from 'react-icons/md'
@@ -9,7 +10,7 @@ import axios from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const PhotoUpload = () => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const [isFilesModifyEnabled, setIsFilesModifyEnabled] = useState(true)
   const [files, setFiles] = useState([])
 

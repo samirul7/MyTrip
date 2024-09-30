@@ -1,22 +1,13 @@
-import { Accordion } from 'rsuite'
-
-// import UploadPhoto from './UploadPhoto/UploadPhoto'
-import PhotoList from './PhotoList/PhotoList'
+import PhotoList from './PhotoList'
 import PhotoUpload from './PhotoUpload'
+import CustomAccordion from '../../components/Accordion/CustomAccordion'
 
 const Photo = () => {
   return (
-    <Accordion>
-      <Accordion.Panel header='Photos Section' defaultExpanded>
-        {/* <UploadPhoto /> */}
-        <PhotoUpload />
-        <Accordion>
-          <Accordion.Panel header='Photos' defaultExpanded>
-            <PhotoList />
-          </Accordion.Panel>
-        </Accordion>
-      </Accordion.Panel>
-    </Accordion>
+    <CustomAccordion header='PhotoSection'>
+      <PhotoUpload />
+      <PhotoList />
+    </CustomAccordion>
   )
 }
 export default Photo
