@@ -4,7 +4,7 @@ import CustomAccordion from '../../components/Accordion/CustomAccordion'
 
 const Photo = () => {
   return (
-    <CustomAccordion header='PhotoSection'>
+    <CustomAccordion header='Photo Section'>
       <PhotoUpload />
       <PhotoList />
     </CustomAccordion>

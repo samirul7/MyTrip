@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import PhotoItem from './PhotoItem'
 import privateAxios from '../../app/api/privateAxios'
+import Message from '../../components/Message/Message'
 
 const PhotoList = () => {
   const params = useParams()
@@ -28,9 +29,15 @@ const PhotoList = () => {
 
   return (
     <div className={styles.photoList}>
-      {photos.map((photo) => (
-        <PhotoItem key={photo._id} photo={photo} />
-      ))}
+      {photos.length === 0 ? (
+        <Message>
+          You don&apos;t have a photo.
+          <br />
+          Upload photo to see it here.
+        </Message>
+      ) : (
+        photos.map((photo) => <PhotoItem key={photo._id} photo={photo} />)
+      )}
     </div>
   )
 }

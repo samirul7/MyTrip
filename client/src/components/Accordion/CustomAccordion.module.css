@@ -1,9 +1,9 @@
 .accordion {
-  margin-top: 10px;
+  margin: 10px;
 }
 
 .header {
-  background-color: rgb(230, 219, 163);
+  background-color: rgb(163, 223, 167);
   display: flex;
   justify-content: space-between;
   align-items: center;

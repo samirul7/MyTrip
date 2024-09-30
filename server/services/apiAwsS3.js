@@ -20,7 +20,7 @@ const s3Client = new S3Client({
   },
 })
 
-async function getObjectUrl(key, id) {
+async function getObjectUrl(key) {
   const command = new GetObjectCommand({
     Bucket: bucket,
     Key: key,

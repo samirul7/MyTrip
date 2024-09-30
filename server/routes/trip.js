@@ -5,21 +5,19 @@ const { User } = require('../models/user')
 
 const router = express.Router()
 
-router.get('/:id', async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   try {
-    let tripInfo = await Trip.findOne({ _id: req.params.id }).select([
+    let tripInfo = await Trip.findById(req.query.id).select([
       'name',
       'location',
     ])
-
     res.send(tripInfo)
   } catch (error) {
-    res.status(500).send('Something went wrong')
-    console.log(error)
+    res.sendStatus(500)
   }
 })
 
-router.get('/', [auth], async (req, res) => {
+router.get('/all', [auth], async (req, res) => {
   try {
     const { tripIds } = (await User.findOne({ _id: req._id })
       .populate('tripIds')

@@ -71,6 +71,7 @@ router.post('/', [auth], async (req, res) => {
 // generate url for putting in AWS S3
 router.get('/url', [auth], async (req, res) => {
   const { tripId, fileInfo } = req.query
+  if (!tripId || !fileInfo) return req.sendStatus(400)
   const urls = await Promise.allSettled(
     fileInfo.map(
       async (file) =>

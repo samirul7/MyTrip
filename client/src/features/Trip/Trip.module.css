@@ -1,0 +1,11 @@
+.trip {
+  background: linear-gradient(to right bottom, #95cfa2, #2e6894);
+  min-height: 90vh;
+}
+
+.tripHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}

@@ -1,8 +1,11 @@
+import styles from './Trip.module.css'
+
 import { useParams } from 'react-router-dom'
-import { Accordion, Heading, HStack, Text } from 'rsuite'
-import Photo from '../Photo/Photo'
 import { useQuery } from '@tanstack/react-query'
+
 import privateAxios from '../../app/api/privateAxios'
+import Photo from '../Photo/Photo'
+import Video from '../Video/Video'
 
 const Trip = () => {
   const params = useParams()
@@ -27,13 +30,13 @@ const Trip = () => {
   if (isError) return <p>Error</p>
 
   return (
-    <>
-      <HStack justifyContent='space-between' style={{ padding: '0 20px' }}>
-        <Heading>{tripInfo.name}</Heading>
-        <Text>Location: {tripInfo.location}</Text>
-      </HStack>
+    <div className={styles.trip}>
+      <div className={styles.tripHeading}>
+        <h2 className={styles.name}>{tripInfo.name}</h2>
+        <p className={styles.location}>Location: {tripInfo.location}</p>
+      </div>
       <Photo />
-      <Accordion>
+      {/* <Accordion>
         <Accordion.Panel header='Videos' defaultExpanded>
           {tripInfo.media?.videos.map((video) => (
             <video
@@ -46,8 +49,9 @@ const Trip = () => {
             </video>
           ))}
         </Accordion.Panel>
-      </Accordion>
-    </>
+      </Accordion> */}
+      <Video />
+    </div>
   )
 }
 

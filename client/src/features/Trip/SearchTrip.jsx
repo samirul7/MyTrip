@@ -11,7 +11,7 @@ const SearchTrip = () => {
   const [searchValue, setSearchValue] = useState('')
   const [filteredTrips, setFileredTrips] = useState([])
 
-  const getTrips = async () => (await privateAxios.get('/trip')).data
+  const getTrips = async () => (await privateAxios.get('/trip/all')).data
 
   const {
     data: trips,
