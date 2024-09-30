@@ -17,10 +17,11 @@ import { Unvisible, Visible } from '@rsuite/icons'
 
 import { forwardRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useLoginMutation } from '../userApiSlice'
 import { validateEmail, validatePassword } from '../../../utils/helper'
-import { setCredentials } from '../userSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import privateAxios from '../../../app/api/privateAxios'
+import { setCredentials } from '../authSlice'
+import { useDispatch } from 'react-redux'
+import { setNameAndId } from '../userSlice'
 
 const Password = forwardRef(function Password(props, ref) {
   const [visible, setVisible] = useState(false)
@@ -43,9 +44,8 @@ const Password = forwardRef(function Password(props, ref) {
 })
 
 const Login = () => {
-  const navigate = useNavigate()
   const [email, setEmail] = useState('test@test.com')
-  const [password, setPassword] = useState('Test@1234')
+  const [password, setPassword] = useState('Temp@8923as')
   const [modal, setModal] = useState({
     isOpen: false,
     title: 'Error',
@@ -53,13 +53,12 @@ const Login = () => {
     type: 'error',
   })
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate('/')
+
   const handleModalClose = () => {
     setModal({ isOpen: false })
   }
-
-  const [login, { isError, isLoading, isSuccess }] = useLoginMutation()
-
-  const dispatch = useDispatch()
 
   const handleSubmit = async () => {
     if (validateEmail(email) === false)
@@ -79,12 +78,16 @@ const Login = () => {
       }))
 
     try {
-      const { accessToken } = await login({
+      const {
+        data: { token, _id, name },
+      } = await privateAxios.post('/auth', {
         email: email.trim(),
         password: password.trim(),
-      }).unwrap()
-      dispatch(setCredentials({ accessToken }))
-      navigate('/')
+      })
+      // console.log(accessToken, '    ', _id)
+      dispatch(setCredentials({ token }))
+      dispatch(setNameAndId({ _id, name }))
+      // navigate('/')
     } catch (err) {
       console.log('check and debug', err)
     }

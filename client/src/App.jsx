@@ -1,14 +1,15 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
 import AppLayout from './ui/AppLayout/AppLayout'
 import Trip from './features/Trip/Trip'
-import NewTrip from './features/NewTrip/NewTrip'
-import { getTripInfo } from './services/apiTrip'
-import PhotoList, {
-  loader as photoLoader,
-} from './features/Photo/PhotoList/PhotoList'
+// import { getTripInfo } from './services/apiTrip'
 import Login from './features/User/Login/Login'
 import SignUp from './features/User/SignUp/SignUp'
 import AuthRequired from './features/User/AuthRequired'
+import SearchTrip from './features/Trip/SearchTrip'
+import CreateTrip from './features/Trip/CreateTrip'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const router = createBrowserRouter([
   {
@@ -18,27 +19,24 @@ const router = createBrowserRouter([
       {
         path: 'trip/:id',
         element: (
-          <AuthRequired>
-            <Trip />
-          </AuthRequired>
+          // <AuthRequired>
+          <Trip />
+          // </AuthRequired>
         ),
-        loader: async ({ params }) => {
-          const data = await getTripInfo(params.id)
-          return data
-        },
-        children: [
-          {
-            path: 'photo',
-            element: <PhotoList />,
-            loader: photoLoader,
-          },
-        ],
       },
       {
-        path: 'newTrip',
+        path: 'trip/new',
         element: (
           <AuthRequired>
-            <NewTrip />
+            <CreateTrip />
+          </AuthRequired>
+        ),
+      },
+      {
+        path: 'searchTrip',
+        element: (
+          <AuthRequired>
+            <SearchTrip />
           </AuthRequired>
         ),
       },
@@ -54,8 +52,15 @@ const router = createBrowserRouter([
   },
 ])
 
+const client = new QueryClient()
+
 const App = () => {
-  return <RouterProvider router={router} />
+  return (
+    <QueryClientProvider client={client}>
+      <ReactQueryDevtools />
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  )
 }
 
 export default App

@@ -27,6 +27,7 @@ const userSchema = new mongooge.Schema({
     type: String,
     required: true,
   },
+  tripIds: [{ type: mongooge.Schema.Types.ObjectId, ref: 'Trip' }],
 })
 
 userSchema.methods.generateAuthToken = function (options) {

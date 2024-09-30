@@ -1,28 +1,42 @@
-import { Accordion, Button, Uploader } from 'rsuite'
-import { useParams } from 'react-router-dom'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import { API_URL } from '../../../services/apiTrip'
+import { Accordion, Button, Uploader } from 'rsuite'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+import privateAxios from '../../../app/api/privateAxios'
 
 const UploadPhoto = () => {
   const [fileList, setFileList] = useState([])
   const [uploadedFileList, setUploadedFileList] = useState([])
   const [isUploading, setIsUploading] = useState(false)
+  const queryClient = useQueryClient()
 
   const { id: tripId } = useParams()
 
-  const updateDatabase = async (fileName, fileType) => {
-    try {
-      const res = await axios.post(`${API_URL}/photo`, {
+  const { mutate } = useMutation({
+    mutationKey: [`${tripId}-photos`],
+    mutationFn: async ({ fileName, fileType }) => {
+      console.log('mutate called')
+      const data = await privateAxios.post(`/photo`, {
         tripId,
         fileName,
         fileType,
       })
-      console.log(res)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+      console.log('before invalidate')
+      queryClient.invalidateQueries(`${tripId}-photos`)
+      console.log('after invalidate ')
+      return data
+    },
+    // need to troubleshoot
+    // onSuccess: async () => {
+    //   console.log('Calling invalidate ....')
+    //   queryClient.invalidateQueries(`${tripId}-photos`)
+    // },
+    onError: (err) => {
+      console.log('Error in onError', err)
+    },
+  })
 
   const handleChange = (files) => {
     setFileList((fileList) => {
@@ -43,8 +57,9 @@ const UploadPhoto = () => {
     const fileType = file.blobFile.type
     const fileName = `${file.fileKey}.${fileType.split('/')[1]}` // filename with extension
     try {
-      const res = await axios.get(`${API_URL}/photo/url`, {
+      const res = await privateAxios.get(`/photo/url`, {
         params: {
+          tripId,
           fileName,
           fileType,
         },
@@ -56,6 +71,10 @@ const UploadPhoto = () => {
         },
       })
       if (awsRes.status === 200) {
+        // update the database
+        const res = await mutate({ fileName, fileType })
+        console.log(res)
+
         setFileList((fileLists) =>
           fileLists.filter((f) => f.fileKey !== file.fileKey)
         )
@@ -63,9 +82,6 @@ const UploadPhoto = () => {
           ...files,
           { ...file, status: 'finished' },
         ])
-
-        // update the database
-        updateDatabase(fileName, fileType)
       }
       // console.log(fileList)
       // console.log(uploadedFileList)

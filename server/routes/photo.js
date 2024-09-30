@@ -1,19 +1,26 @@
 const express = require('express')
+const auth = require('../middlewares/auth')
+
 const { Photo } = require('../models/photo')
-const { getObjectUrl, putObjectUrl } = require('../services/apiAwsS3')
+const {
+  getObjectUrl,
+  putObjectUrl,
+  deleteObjectUrl,
+} = require('../services/apiAwsS3')
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  console.log('I am being called')
+router.get('/', [auth], async (req, res) => {
   const { tripId } = req.query
-  console.log(tripId)
   try {
+    // find the photos in DB with trip id
     const photos = await Photo.find({ tripId })
+
+    // generate the url for retriving the photos from AWS S3
     const promises = photos.map(async ({ fileName, _id }) => {
       return {
         _id,
-        url: await getObjectUrl(`photos/${fileName}`),
+        url: await getObjectUrl(`photos/${tripId}-${fileName}`),
       }
     })
     Promise.all(promises)
@@ -29,18 +36,24 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/url', async (req, res) => {
-  const { fileName, fileType } = req.query
+router.delete('', [auth], async (req, res) => {
+  const { _id } = req.query
+  console.log(_id)
   try {
-    const url = await putObjectUrl(`photos/${fileName}`, fileType)
-    res.send({ url })
-  } catch (error) {
-    console.log('Something went wrong', error)
-    res.status(404).send('Bad Request')
+    const { tripId, fileName } = await Photo.findByIdAndDelete(_id)
+    const s3Res = await deleteObjectUrl(`photos/${tripId}-${fileName}`)
+
+    res.send({
+      url: s3Res,
+    })
+  } catch (err) {
+    console.log('Something wrong')
   }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', [auth], async (req, res) => {
+  console.log('I am being called post photo')
+  console.log(req.body)
   try {
     let photo = new Photo({
       fileName: req.body.fileName,
@@ -53,6 +66,33 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.log(error)
   }
+})
+
+// generate url for putting in AWS S3
+router.get('/url', [auth], async (req, res) => {
+  const { tripId, fileInfo } = req.query
+  const urls = await Promise.allSettled(
+    fileInfo.map(
+      async (file) =>
+        await putObjectUrl(`photos/${tripId}-${file.name}`, file.type, file.id)
+    )
+  )
+  return res.send(
+    urls.map((url) =>
+      url.status === 'fulfilled'
+        ? { status: url.status, id: Number(url.value.id), url: url.value.url }
+        : { status: url.status, id: Number(url.reason.id) }
+    )
+  )
+  // const { tripId, fileName, fileType } = req.query
+  // console.log('bye', tripId)
+  // try {
+  //   const url = await putObjectUrl(`photos/${tripId}-${fileName}`, fileType)
+  //   res.send({ url })
+  // } catch (error) {
+  //   console.log('Something went wrong', error)
+  //   res.status(404).send('Bad Request')
+  // }
 })
 
 module.exports = router

@@ -1,0 +1,13 @@
+.trip {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 100%;
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.trip:hover {
+  cursor: pointer;
+  background-color: #eee;
+}

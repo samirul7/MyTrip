@@ -3,11 +3,14 @@ const {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
+  DeleteObjectCommand,
 } = require('@aws-sdk/client-s3')
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 
 // console.log(config.get('accessKey'))
 // console.log(config.get('secretAccessKey'))
+
+const bucket = 'sami-mytrip-bucket'
 
 const s3Client = new S3Client({
   region: 'eu-north-1',
@@ -17,23 +20,34 @@ const s3Client = new S3Client({
   },
 })
 
-async function getObjectUrl(key) {
+async function getObjectUrl(key, id) {
   const command = new GetObjectCommand({
-    Bucket: 'sami-mytrip-bucket',
+    Bucket: bucket,
     Key: key,
   })
   const url = await getSignedUrl(s3Client, command)
   return url
 }
 
-async function putObjectUrl(key, contentType) {
+async function putObjectUrl(key, contentType, id) {
   const command = new PutObjectCommand({
-    Bucket: 'sami-mytrip-bucket',
+    Bucket: bucket,
     Key: key,
     ContentType: contentType,
   })
 
   const url = await getSignedUrl(s3Client, command)
+  return { url, id }
+}
+
+async function deleteObjectUrl(key) {
+  const command = new DeleteObjectCommand({
+    Bucket: bucket,
+    Key: key,
+  })
+
+  const url = await getSignedUrl(s3Client, command)
+  console.log(url)
   return url
 }
 
@@ -50,3 +64,4 @@ async function putObjectUrl(key, contentType) {
 
 module.exports.getObjectUrl = getObjectUrl
 module.exports.putObjectUrl = putObjectUrl
+module.exports.deleteObjectUrl = deleteObjectUrl

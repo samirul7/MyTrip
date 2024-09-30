@@ -1,0 +1,15 @@
+.trip_list {
+  display: grid;
+  justify-content: center;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, 280px);
+  width: 80%;
+  margin: 30px auto;
+}
+
+/* // backgroundColor: '#979', */
+/* width: '80%',
+justifyContent: 'center',
+gap: 10,
+gridTemplateColumns: 'repeat(auto-fit, 240px)',
+margin: '30px auto', */

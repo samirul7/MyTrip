@@ -1,0 +1,30 @@
+.container {
+  width: 400px;
+  height: 400px;
+  position: relative;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.deleteIcon {
+  font-size: 25px;
+  border: 1px solid rgb(249, 134, 134);
+  padding: 4px;
+  border-radius: 5px;
+  color: rgb(255, 136, 136);
+  background-color: white;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.deleteIcon:hover {
+  background-color: rgb(244, 186, 186);
+  color: red;
+}

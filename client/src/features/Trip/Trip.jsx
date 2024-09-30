@@ -1,14 +1,31 @@
-import styles from './Trip.module.css'
-
-import { useLoaderData } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Accordion, Heading, HStack, Text } from 'rsuite'
-import PhotoList from '../Photo/PhotoList/PhotoList'
-import { useState } from 'react'
 import Photo from '../Photo/Photo'
+import { useQuery } from '@tanstack/react-query'
+import privateAxios from '../../app/api/privateAxios'
 
 const Trip = () => {
-  const tripInfo = useLoaderData()
-  const [showVideos, setShowVideos] = useState(true)
+  const params = useParams()
+
+  const {
+    data: tripInfo,
+    isError,
+    isLoading,
+  } = useQuery({
+    queryKey: ['tripInfo'],
+    queryFn: async () =>
+      (
+        await privateAxios.get('/trip', {
+          params: {
+            id: params.id,
+          },
+        })
+      ).data,
+  })
+
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error</p>
+
   return (
     <>
       <HStack justifyContent='space-between' style={{ padding: '0 20px' }}>

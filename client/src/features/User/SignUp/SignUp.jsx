@@ -18,8 +18,9 @@ import { Unvisible, Visible } from '@rsuite/icons'
 import { forwardRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { validateEmail, validatePassword } from '../../../utils/helper'
-import axios from 'axios'
-import { API_URL } from '../../../services/apiTrip'
+// import axios from 'axios'
+// import { API_URL } from '../../../services/apiTrip'
+import privateAxios from '../../../app/api/privateAxios'
 
 const Password = forwardRef(function Password(props, ref) {
   const [visible, setVisible] = useState(false)
@@ -132,8 +133,8 @@ const SignUp = () => {
     //   }))
     //   all good, send request to create user
     try {
-      const res = await axios.post(
-        `${API_URL}/user`,
+      const res = await privateAxios.post(
+        '/user',
         {
           name,
           email,

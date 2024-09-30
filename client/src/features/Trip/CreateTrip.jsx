@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { Button, ButtonToolbar, Form, Modal, Text } from 'rsuite'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { API_URL } from '../../services/apiTrip'
+import privateAxios from '../../app/api/privateAxios'
 
-const NewTrip = () => {
-  const [name, setName] = useState('')
-  const [location, setLocation] = useState('')
+const CreateTrip = () => {
+  const [name, setName] = useState('First')
+  const [location, setLocation] = useState('First')
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModelOpen] = useState(false)
   const [modalText, setModalText] = useState('')
@@ -19,14 +18,18 @@ const NewTrip = () => {
     setIsLoading(true)
 
     try {
-      const res = await axios({
-        method: 'post',
-        url: `${API_URL}/trip`,
-        data: {
-          name,
-          location,
-        },
+      const res = await privateAxios.post('/trip', {
+        name,
+        location,
       })
+      // const res = await axios({
+      //   method: 'post',
+      //   url: `${API_URL}/trip`,
+      //   data: {
+      //     name,
+      //     location,
+      //   },
+      // })
       if (res.status === 200) {
         setIsModelOpen(true)
         setModalText(
@@ -34,6 +37,7 @@ const NewTrip = () => {
         )
         setModalTitle('Trip Created')
         setTripId(res.data._id)
+        console.log(res.data)
       }
     } catch (error) {
       console.log(error)
@@ -98,4 +102,4 @@ const NewTrip = () => {
     </>
   )
 }
-export default NewTrip
+export default CreateTrip

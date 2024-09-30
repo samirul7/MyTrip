@@ -1,36 +1,38 @@
-import { useLoaderData } from 'react-router-dom'
-import { API_URL } from '../../../services/apiTrip'
-
 import styles from './PhotoList.module.css'
-import axios from 'axios'
+
+import { useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+
+import PhotoItem from '../PhotoItem'
+import privateAxios from '../../../app/api/privateAxios'
 
 const PhotoList = () => {
-  // const { data: photos } = useLoaderData()
-  const photos = useLoaderData()
-  console.log(photos)
+  const params = useParams()
 
-  // return <p>Happy 😊</p>
+  const {
+    data: photos,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: [`${params.id}-photos`],
+    queryFn: async () =>
+      (
+        await privateAxios.get(`/photo`, {
+          params: { tripId: params.id },
+        })
+      ).data,
+  })
+
+  if (isError) return <p>Error</p>
+  if (isLoading) return <p>Loading</p>
 
   return (
-    <>
-      {/* <p> I am photoList</p> */}
+    <div className={styles.photoList}>
       {photos.map((photo) => (
-        <img className={styles.img} key={photo._id} src={photo.url} />
+        <PhotoItem key={photo._id} photo={photo} />
       ))}
-    </>
+    </div>
   )
 }
 
 export default PhotoList
-
-export async function loader({ params }) {
-  try {
-    const res = await axios.get(`${API_URL}/photo`, {
-      params: { tripId: params.id },
-    })
-    if (res.status === 200) return res.data
-    throw Error('Something went wrong')
-  } catch (error) {
-    console.error('Something went wrong', error)
-  }
-}
